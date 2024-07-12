@@ -11,6 +11,10 @@ const App: React.FC = () => {
 
   const queryClient = useQueryClient()
 
+  useEffect(() => {
+    saveCitiesToStorage(cities)
+  }, [cities])
+
   const addCity = (city: string) => {
     if (!cities.includes(city)) {
       const updatedCities = [city, ...cities]
@@ -23,10 +27,13 @@ const App: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    // Ensure cities are saved to storage when updated
-    saveCitiesToStorage(cities)
-  }, [cities])
+  const removeCity = (cityToRemove: string) => {
+    if (cities.length === 1) return
+    const updatedCities = cities.filter((city) => city !== cityToRemove)
+    setCities(updatedCities)
+    saveCitiesToStorage(updatedCities)
+    queryClient.removeQueries({ queryKey: ["weatherData", cityToRemove] })
+  }
 
   return (
     <main className="h-full p-6 flex flex-col gap-2 items-center">
@@ -37,7 +44,7 @@ const App: React.FC = () => {
 
       <AddCityForm addCity={addCity} />
       {cities.map((city) => (
-        <WeatherDetails key={city} city={city} />
+        <WeatherDetails key={city} city={city} onRemoveCity={removeCity} />
       ))}
     </main>
   )

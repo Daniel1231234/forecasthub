@@ -13,8 +13,6 @@ export const getWeatherData = async (city: string) => {
     },
   })
 
-  console.log(response.data)
-
   const weatherData: WeatherData = {
     cityName: response.data.name,
     clouds: response.data.clouds.all,

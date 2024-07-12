@@ -25,20 +25,25 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
 
   useEffect(() => {
     if (!isFetching && city.length > 2 && suggestions.length === 0) {
-      toast({
-        title: "No cities found. Try another search.",
-        variant: "destructive",
-        duration: 2000,
-      })
-    }
-  }, [suggestions, isFetching, city])
+      const timer = setTimeout(() => {
+        toast({
+          title: "No cities found. Try another search.",
+          variant: "destructive",
+          duration: 2000,
+        })
+      }, 1000) 
 
+      return () => clearTimeout(timer) 
+    }
+  }, [suggestions, isFetching, city, toast])
+
+  
   const onChooseCity = (cityName: string) => {
     setCity("")
     addCity(cityName)
   }
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!city) return
 

@@ -11,7 +11,7 @@ export interface WeatherData {
   windDeg: number
   humidity: number
   pressure: number
-  updatedAt: any
+  updatedAt: number
 }
 
 interface Weather {

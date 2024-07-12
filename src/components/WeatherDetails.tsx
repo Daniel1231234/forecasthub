@@ -1,14 +1,21 @@
-import { Sun, Wind, Droplet, BarChart2 } from "lucide-react"
+import { Sun, Wind, Droplet, BarChart2, X } from "lucide-react"
 import { useWeatherData } from "@/hooks/useWeatherData"
 import getWeatherIcon from "./WeatherIcon"
 import { Skeleton } from "./ui/skeleton"
+import { Button } from "./ui/button"
 
 interface WeatherDetailsProps {
   city: string
+  onRemoveCity: (city: string) => void
 }
 
-const WeatherDetails = ({ city }: WeatherDetailsProps) => {
-  const { data: weatherData, isError, isLoading } = useWeatherData(city)
+const WeatherDetails = ({ city, onRemoveCity }: WeatherDetailsProps) => {
+  const {
+    data: weatherData,
+    isError,
+    isLoading,
+    refetch,
+  } = useWeatherData(city)
 
   if (isLoading) {
     return (
@@ -19,15 +26,33 @@ const WeatherDetails = ({ city }: WeatherDetailsProps) => {
   }
 
   if (isError) {
-    return <p>Error fetching data</p>
+    console.error("Error fetching weather data")
+    return (
+      <div className="text-center p-4">
+        <p>
+          Could not fetch the weather data. Please check your connection or try
+          again later.
+        </p>
+        <button
+          onClick={() => refetch()} // Wrapping refetch in an arrow function
+          className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
+    )
   }
 
-  const updatedAt = new Date(weatherData?.updatedAt).toLocaleTimeString()
+  if (!weatherData) {
+    return <p>No data available for this city.</p>
+  }
+
+  const updatedAt = new Date(weatherData.updatedAt).toLocaleTimeString()
 
   const weatherIcon = getWeatherIcon(weatherData?.weather[0].description)
 
   return (
-    <div className="w-full max-w-5xl mx-auto mt-4 p-4 bg-blue-100 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-center">
+    <div className="w-full max-w-5xl mx-auto mt-4 p-4 bg-blue-100 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-center relative">
       <div className="text-center flex flex-col gap-6 items-center justify-center w-full md:w-1/2">
         <h3 className="text-xl md:text-2xl font-bold text-gray-700">
           {weatherData?.cityName}
@@ -73,6 +98,13 @@ const WeatherDetails = ({ city }: WeatherDetailsProps) => {
           </small>
         </div>
       </div>
+      <Button
+        variant="ghost"
+        onClick={() => onRemoveCity(city)}
+        className=" absolute top-2 right-2"
+      >
+        <X />
+      </Button>
     </div>
   )
 }
