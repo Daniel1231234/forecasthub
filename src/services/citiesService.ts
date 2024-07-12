@@ -4,10 +4,11 @@ import axios from "axios"
 export const fetchCities = async (query: string): Promise<ISuggestion[]> => {
   if (!query) return []
   const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY
-  const url = `http://api.openweathermap.org/data/2.5/find?q=${query}&type=like&sort=population&cnt=10&appid=${apiKey}`
+  const BASE_URL = "https://api.openweathermap.org/data/2.5"
+
+  const url = `${BASE_URL}/find?q=${query}&type=like&cnt=10&appid=${apiKey}`
   try {
     const response = await axios.get(url)
-    console.log(response.data)
 
     if (response.data && response.data.list.length > 0) {
       return response.data.list.map((item: any) => {
