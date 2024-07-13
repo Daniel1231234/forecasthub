@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card"
 import { Input } from "./ui/input"
 import { Search } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { getCitySuggestions } from "@/services/citiesService"
+import { fetchCities, getCitySuggestions } from "@/services/citiesService"
 import { ISuggestion } from "@/types"
 import { useToast } from "./ui/use-toast"
 import Suggestions from "./Suggestions"
@@ -62,7 +62,7 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
   }
 
   return (
-    <Card className="max-w-5xl w-full bg-[#BEF6EF] flex justify-evenly items-center">
+    <Card className="max-w-5xl w-full bg-blue-100 flex justify-evenly items-center">
       <CardContent className="w-full p-2">
         <form
           className="bg-transparent flex w-full justify-center items-center p-2 gap-2"

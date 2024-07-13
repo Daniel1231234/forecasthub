@@ -15,14 +15,15 @@ const App: React.FC = () => {
   const { toast } = useToast()
 
   useEffect(() => {
-    saveCitiesToStorage(cities.map((c) => c.toLowerCase()))
+    saveCitiesToStorage(cities)
   }, [cities])
 
   const addCity = async (city: string) => {
-    if (!cities.includes(city)) {
+    const lowerCaseCity = city.toLowerCase()
+    if (!cities.map((c) => c.toLowerCase()).includes(lowerCaseCity)) {
       try {
         await getWeatherData(city)
-        const updatedCities = [city.toLowerCase(), ...cities]
+        const updatedCities = [city, ...cities]
         setCities(updatedCities)
         saveCitiesToStorage(updatedCities)
         queryClient.prefetchQuery({
@@ -37,6 +38,13 @@ const App: React.FC = () => {
           duration: 2000,
         })
       }
+    } else {
+      toast({
+        title: "City already exists",
+        description: "This city is already in your list.",
+        variant: "destructive",
+        duration: 2000,
+      })
     }
   }
 
