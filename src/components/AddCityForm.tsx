@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card"
 import { Input } from "./ui/input"
 import { Search } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { fetchCities } from "@/services/citiesService"
+import { getCitySuggestions } from "@/services/citiesService"
 import { ISuggestion } from "@/types"
 import { useToast } from "./ui/use-toast"
 import Suggestions from "./Suggestions"
@@ -19,7 +19,7 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
 
   const { data: suggestions = [], isFetching } = useQuery<ISuggestion[]>({
     queryKey: ["cities", city],
-    queryFn: () => fetchCities(city),
+    queryFn: () => getCitySuggestions(city),
     enabled: city.length > 2,
   })
 
@@ -31,13 +31,12 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
           variant: "destructive",
           duration: 2000,
         })
-      }, 1000) 
+      }, 1000)
 
-      return () => clearTimeout(timer) 
+      return () => clearTimeout(timer)
     }
   }, [suggestions, isFetching, city, toast])
 
-  
   const onChooseCity = (cityName: string) => {
     setCity("")
     addCity(cityName)
@@ -52,7 +51,7 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
         (suggestion) => suggestion.name.toLowerCase() === city.toLowerCase()
       )
     ) {
-      onChooseCity(city)
+      onChooseCity(city.toLowerCase())
     } else {
       toast({
         title: "Please select a valid city from the suggestions.",

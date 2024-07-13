@@ -22,7 +22,7 @@ interface Weather {
 }
 
 export interface ISuggestion {
-  id: number
+  id: number | string
   name: string
   country: string
 }

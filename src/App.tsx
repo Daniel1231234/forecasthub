@@ -5,31 +5,46 @@ import WeatherDetails from "./components/WeatherDetails"
 import { getCitiesFromStorage, saveCitiesToStorage } from "./services/storage"
 import { useQueryClient } from "@tanstack/react-query"
 import { getWeatherData } from "./services/weatherService"
+import { useToast } from "./components/ui/use-toast"
 
 const App: React.FC = () => {
   const [cities, setCities] = useState<string[]>(getCitiesFromStorage())
 
   const queryClient = useQueryClient()
 
+  const { toast } = useToast()
+
   useEffect(() => {
-    saveCitiesToStorage(cities)
+    saveCitiesToStorage(cities.map((c) => c.toLowerCase()))
   }, [cities])
 
-  const addCity = (city: string) => {
+  const addCity = async (city: string) => {
     if (!cities.includes(city)) {
-      const updatedCities = [city, ...cities]
-      setCities(updatedCities)
-      saveCitiesToStorage(updatedCities)
-      queryClient.prefetchQuery({
-        queryKey: ["weatherData", city],
-        queryFn: () => getWeatherData(city),
-      })
+      try {
+        await getWeatherData(city)
+        const updatedCities = [city.toLowerCase(), ...cities]
+        setCities(updatedCities)
+        saveCitiesToStorage(updatedCities)
+        queryClient.prefetchQuery({
+          queryKey: ["weatherData", city],
+          queryFn: () => getWeatherData(city),
+        })
+      } catch (error) {
+        toast({
+          title: "City not found",
+          description: "Please enter a valid city name.",
+          variant: "destructive",
+          duration: 2000,
+        })
+      }
     }
   }
 
   const removeCity = (cityToRemove: string) => {
     if (cities.length === 1) return
-    const updatedCities = cities.filter((city) => city !== cityToRemove)
+    const updatedCities = cities.filter(
+      (city) => city.toLowerCase() !== cityToRemove
+    )
     setCities(updatedCities)
     saveCitiesToStorage(updatedCities)
     queryClient.removeQueries({ queryKey: ["weatherData", cityToRemove] })
