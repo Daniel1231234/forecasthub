@@ -53,7 +53,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        "bg-image": "url('/bg.png')",
+        "bg-image": "url('/clouds.jpg')",
       },
       borderRadius: {
         lg: "var(--radius)",

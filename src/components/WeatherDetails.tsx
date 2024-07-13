@@ -15,6 +15,7 @@ const WeatherDetails = ({ city, onRemoveCity }: WeatherDetailsProps) => {
     isError,
     isLoading,
     refetch,
+    dataUpdatedAt,
   } = useWeatherData(city)
 
   if (isLoading) {
@@ -47,7 +48,7 @@ const WeatherDetails = ({ city, onRemoveCity }: WeatherDetailsProps) => {
     return <p>No data available for this city.</p>
   }
 
-  const updatedAt = new Date(weatherData.updatedAt).toLocaleTimeString()
+  const updatedAt = new Date(dataUpdatedAt).toLocaleTimeString()
 
   const weatherIcon = getWeatherIcon(weatherData?.weather[0].description)
 

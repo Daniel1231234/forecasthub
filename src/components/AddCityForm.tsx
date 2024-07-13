@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "./ui/card"
 import { Input } from "./ui/input"
-import { Search } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { fetchCities, getCitySuggestions } from "@/services/citiesService"
+import { getCitySuggestions } from "@/services/citiesService"
 import { ISuggestion } from "@/types"
 import { useToast } from "./ui/use-toast"
 import Suggestions from "./Suggestions"
+import CloudSearchSvg from "./CloudSearchSvg"
 
 interface IAddCityForm {
   addCity: (city: string) => void
@@ -14,7 +14,6 @@ interface IAddCityForm {
 
 const AddCityForm = ({ addCity }: IAddCityForm) => {
   const [city, setCity] = useState<string>("")
-
   const { toast } = useToast()
 
   const { data: suggestions = [], isFetching } = useQuery<ISuggestion[]>({
@@ -31,7 +30,7 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
           variant: "destructive",
           duration: 2000,
         })
-      }, 1000)
+      }, 2000)
 
       return () => clearTimeout(timer)
     }
@@ -68,7 +67,7 @@ const AddCityForm = ({ addCity }: IAddCityForm) => {
           className="bg-transparent flex w-full justify-center items-center p-2 gap-2"
           onSubmit={onSubmit}
         >
-          <Search className="w-7 h-7 ml-2" />
+          <CloudSearchSvg className="w-7 h-7 ml-2" />
           <Input
             placeholder="Search city here"
             className="bg-transparent focus-visible:ring-offset-0 focus-visible:ring-0 text-gray-900 text-xl border-0"

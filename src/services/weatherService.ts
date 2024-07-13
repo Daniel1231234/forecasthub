@@ -27,7 +27,6 @@ export const getWeatherData = async (city: string) => {
       windDeg: response.data.wind.deg,
       humidity: response.data.main.humidity,
       pressure: response.data.main.pressure,
-      updatedAt: Date.now(),
     }
 
     return weatherData

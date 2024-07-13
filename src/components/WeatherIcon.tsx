@@ -9,7 +9,7 @@ const getWeatherIcon = (description?: string) => {
     case description.includes("rain"):
       return <CloudRain className="text-blue-500 w-24 h-24" />
     case description.includes("clouds"):
-      return <Cloud className="text-gray-400 w-24 h-24" />
+      return <Cloud className="text-gray-400 w-24 h-24 " />
     case description.includes("snow"):
       return <CloudSnow className="text-white w-24 h-24" />
     default:
