@@ -51,7 +51,7 @@ const App: React.FC = () => {
   const removeCity = (cityToRemove: string) => {
     if (cities.length === 1) return
     const updatedCities = cities.filter(
-      (city) => city.toLowerCase() !== cityToRemove
+      (city) => city.toLowerCase() !== cityToRemove.toLowerCase()
     )
     setCities(updatedCities)
     saveCitiesToStorage(updatedCities)

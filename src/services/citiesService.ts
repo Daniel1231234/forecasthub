@@ -32,9 +32,10 @@ export const getCitySuggestions = async (
   value: string
 ): Promise<ISuggestion[]> => {
   const geoUsername = import.meta.env.VITE_GEONAMES_USERNAME
+  const BASE_URL = "https://secure.geonames.org/"
 
   const response = await axios.get(
-    `http://secure.geonames.org/searchJSON?name_startsWith=${value}&maxRows=10&username=${geoUsername}`
+    `${BASE_URL}searchJSON?name_startsWith=${value}&maxRows=10&username=${geoUsername}`
   )
 
   return response.data.geonames.map((city: any) => ({
